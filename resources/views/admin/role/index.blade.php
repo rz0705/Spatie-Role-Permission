@@ -8,12 +8,13 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex flex-col mt-8">
+                    <div class="flex items-center justify-between px-6">
+                        <h1 class="flex block inline-block py-4 text-2xl font-extrabold tracking-tight sm:text-3xl text-slate-900 dark:text-slate-200 sm:inline-block">{{ __('Manage Roles') }}</h1>
                         @can('role create')
-                        <div class="mb-8 d-print-none with-border">
-                            <a href="{{ route('role.create') }}" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">{{ __('Add Role') }}</a>
-                        </div>
+                            <a href="{{route('role.create')}}" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">{{ __('Add Role') }}</a>
                         @endcan
+                    </div>
+                    <div class="flex flex-col mt-8">
                         <div class="py-2">
                             @if(session()->has('message'))
                             <div class="mb-8 font-bold text-green-400">
@@ -89,6 +90,8 @@
         function confirmDelete(roleId) {
             if (confirm("Are you sure want to delete {{ $role->name }} role?")) {
                 document.getElementById('delete-form-' + roleId).submit();
+            } else {
+                return false;
             }
         }
     </script>

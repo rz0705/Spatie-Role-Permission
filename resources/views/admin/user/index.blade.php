@@ -8,12 +8,13 @@
 		<div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 			<div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
 				<div class="p-6 bg-white border-b border-gray-200">
-					<div class="flex flex-col mt-8">
+					<div class="flex items-center justify-between px-6">
+						<h1 class="flex block inline-block py-4 text-2xl font-extrabold tracking-tight sm:text-3xl text-slate-900 dark:text-slate-200 sm:inline-block">{{ __('Manage Users') }}</h1>
 						@can('user create')
-						<div class="mb-8 d-print-none with-border">
 							<a href="{{ route('user.create') }}" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">{{ __('Add User') }}</a>
-						</div>
 						@endcan
+					</div>
+					<div class="flex flex-col mt-8">
 						<div class="py-2">
 							@if(session()->has('message'))
 							<div class="mb-8 font-bold text-green-400">
@@ -62,16 +63,16 @@
 											</td>
 											@canany(['user edit', 'user delete'])
 											<td class="p-4 pl-8 border-b border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400">
-												<form action="{{ route('user.destroy', $user->id) }}" method="POST">
+												<form id="delete-form-{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}" method="POST">
 													@can('user edit')
-													<a href="{{route('user.edit', $user->id)}}" class="px-4 py-2 mr-4 text-white bg-blue-600">
+													<a href="{{route('user.edit', $user->id)}}" class="px-3 py-2 mb-2 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg hover:text-white hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 me-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
 														{{ __('Edit') }}
-													</a>
+													</a>&nbsp;&nbsp;
 													@endcan
 													@can('user delete')
 													@csrf
 													@method('DELETE')
-													<button class="px-3 py-2 mb-2 text-sm font-medium text-center text-red-700 border border-red-700 rounded-lg hover:text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 me-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+													<button type ="button" class="px-3 py-2 mb-2 text-sm font-medium text-center text-red-700 border border-red-700 rounded-lg hover:text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 me-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900" onclick="confirmDelete('{{ $user->id }}')">
 														{{ __('Delete') }}
 													</button>
 													@endcan
@@ -92,4 +93,15 @@
 			</div>
 		</div>
 	</div>
+
+	<script>
+        function confirmDelete(userId) {
+			// console.log(confirm("ok"));
+            if (confirm("Are you sure want to delete {{ $user->name }}?")) {
+                document.getElementById('delete-form-' + userId).submit();
+            } else {
+                return false;
+            }
+        }
+    </script>
 </x-app-layout>

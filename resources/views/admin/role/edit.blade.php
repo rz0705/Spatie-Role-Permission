@@ -9,22 +9,18 @@
 			<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 				<div class="px-6 flex justify-between items-center">
 					<h1 class="inline-block text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200 py-4 block sm:inline-block flex">{{ __('Update role') }}</h1>
-					<a href="{{route('role.index')}}" class="px-4 py-2 text-white mr-4 bg-blue-600">{{ __('Back to all role') }}</a>
-					@if ($errors->any())
-					<ul class="mt-3 list-none list-inside text-sm text-red-400">
-						@foreach ($errors->all() as $error)
-						<li>{{ $error }}</li>
-						@endforeach
-					</ul>
-					@endif
+					<a href="{{route('role.index')}}" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">{{ __('Back to all role') }}</a>
 				</div>
 				<div class="w-full px-6 py-4 bg-white overflow-hidden">
 					<form method="POST" action="{{ route('role.update', $role->id) }}">
 						@csrf
 						@method('PUT')
 						<div class="py-2">
-							<label for="name" class="block font-medium text-sm text-gray-700{{$errors->has('name') ? ' text-red-400' : ''}}">{{ __('Name') }}</label>
-							<input id="name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full{{$errors->has('name') ? ' border-red-400' : ''}}" type="text" name="name" value="{{ old('name', $role->name) }}" />
+							<label for="name" class="block font-medium text-sm text-gray-700">{{ __('app.role.name') }}</label>
+							<input id="name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full" type="text" name="name" value="{{ old('name', $role->name) }}" />
+							@error('name')
+								<p class="text-red-500">{{ $message }}</p>
+							@enderror
 						</div>
 						@unless ($role->name == env('APP_SUPER_ADMIN', 'super-admin'))
 						<div class="py-2">
@@ -41,6 +37,9 @@
 								----
 								@endforelse
 							</div>
+							@error('permissions')
+                            <p class="text-red-500">{{ $message }}</p>
+                            @enderror
 						</div>
 						@endunless
 						<div class="flex justify-end mt-4">

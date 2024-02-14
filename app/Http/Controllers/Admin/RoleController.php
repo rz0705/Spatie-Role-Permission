@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Http\Requests\RoleRequest;
 use Illuminate\Http\Request;
 
 
@@ -61,11 +62,8 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:'.config('permission.table_names.roles', 'roles').',name',
-        ]);
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
         if(! empty($request->permissions)) {
             $role->givePermissionTo($request->permissions);
@@ -106,7 +104,7 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:'.config('permission.table_names.roles', 'roles').',name,'.$role->id,
